@@ -17,7 +17,6 @@ public class BinarySearchTreeOperation {
 		}*/
 		
 		//Add nodes by recursion
-		//bstOperation.addNodeByRecursion(root, arr[0]);
 		for(int i=0; i<arr.length; i++) {
 			root = bstOperation.addNodeByRecursion(root, arr[i]);	
 		}
