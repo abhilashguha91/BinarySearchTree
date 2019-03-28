@@ -26,7 +26,7 @@ public class BinarySearchTreeOperation {
 		System.out.println("Post Order Traverse");
 		bstOperation.postOrderTraverse(root);
 		
-		Node n = bstOperation.findNode(6);
+		Node n = bstOperation.findNodeByRecurtion(root,11);
 		if(n !=null) {
 			System.out.println("Node Found:"+ n.value);
 		}else {
@@ -92,7 +92,7 @@ public class BinarySearchTreeOperation {
 		System.out.println(root.value);
 	}
 	
-	Node findNode(int key) {
+	Node findNodeByIteration(int key) {
 		
 		Node pointer = root;
 		while(pointer.value!=key) {
@@ -104,6 +104,15 @@ public class BinarySearchTreeOperation {
 				return null;
 		}
 		return pointer;
+		
+	}
+	
+	Node findNodeByRecurtion(Node root, int key) {
+		
+		if(root == null) return null;
+		if(key < root.value) root = findNodeByRecurtion(root.leftChild,key);
+		if(key > root.value) root = findNodeByRecurtion(root.rightChild, key);
+		return root;
 		
 	}
 	
