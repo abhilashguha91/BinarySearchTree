@@ -2,16 +2,24 @@ package com.javaprep.ds;
 
 public class BinarySearchTreeOperation {
 	
-	
-	static Node root = null;
-
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		BinarySearchTreeOperation bstOperation = new BinarySearchTreeOperation();
+		Node root = null;
 		
 		int arr[] = {5,3,6,8,4,1,10,9,2,7};
+		
+		// TODO: open any one addition at a time.
+		// Add nodes by iteration
+		/*
 		for(int i : arr) {
-			bstOperation.addNewNode(i);
+			root = bstOperation.addNewNode(root, i);
+		}*/
+		
+		//Add nodes by recursion
+		//bstOperation.addNodeByRecursion(root, arr[0]);
+		for(int i=0; i<arr.length; i++) {
+			root = bstOperation.addNodeByRecursion(root, arr[i]);	
 		}
 		
 		//Inorder Traverse
@@ -26,6 +34,7 @@ public class BinarySearchTreeOperation {
 		System.out.println("Post Order Traverse");
 		bstOperation.postOrderTraverse(root);
 		
+		//Find node by recurtion
 		Node n = bstOperation.findNodeByRecurtion(root,11);
 		if(n !=null) {
 			System.out.println("Node Found:"+ n.value);
@@ -33,14 +42,27 @@ public class BinarySearchTreeOperation {
 			System.out.println("Node not Found:");
 		}
 		
+		// Minimum Node in the tree
+		System.out.println("Mininum Node:" + bstOperation.getMinimumNodeFromTree(root).value);
+		
+		// Delete Node
+		Node replacedNode = bstOperation.deleteNode(root, 7);
+		if(replacedNode != null) {
+			System.out.println("Node replaced by:"+replacedNode.value);
+		}else {
+			System.out.println("Node not found");
+		}
+		
+		//Inorder Traverse
+		System.out.println("Inorder Traverse");
+		bstOperation.inorderTraverse(root);
+		
 	}
 	
-	void addNewNode(int value) {
+	Node addNewNode(Node root, int value) {
 		
 		Node newNode = new Node();
 		newNode.value = value;
-		
-		
 		if(root==null) {
 			root = newNode;
 		}else {
@@ -63,6 +85,34 @@ public class BinarySearchTreeOperation {
 				}
 			}
 		}
+		return root;
+	}
+	
+	public static Node addNodeByRecursion(Node root, int numberToBeInserted) {
+		
+		if (root == null) {
+			Node nodeToBeInserted = new Node();
+			nodeToBeInserted.value = numberToBeInserted;
+			root = nodeToBeInserted;
+			return root;
+		}
+		if (root.value > numberToBeInserted) {
+			if (root.leftChild == null) {
+				Node nodeToBeInserted = new Node();
+				nodeToBeInserted.value = numberToBeInserted;
+				root.leftChild = nodeToBeInserted;
+			}
+			else
+				addNodeByRecursion(root.leftChild, numberToBeInserted);
+		} else if (root.value < numberToBeInserted)
+			if (root.rightChild == null) {
+				Node nodeToBeInserted = new Node();
+				nodeToBeInserted.value = numberToBeInserted;
+				root.rightChild = nodeToBeInserted;
+			}
+			else
+				addNodeByRecursion(root.rightChild, numberToBeInserted);
+		return root;
 	}
 	
 	void inorderTraverse(Node root) {
@@ -92,7 +142,7 @@ public class BinarySearchTreeOperation {
 		System.out.println(root.value);
 	}
 	
-	Node findNodeByIteration(int key) {
+	Node findNodeByIteration(Node root, int key) {
 		
 		Node pointer = root;
 		while(pointer.value!=key) {
@@ -109,11 +159,50 @@ public class BinarySearchTreeOperation {
 	
 	Node findNodeByRecurtion(Node root, int key) {
 		
-		if(root == null) return null;
-		if(key < root.value) root = findNodeByRecurtion(root.leftChild,key);
-		if(key > root.value) root = findNodeByRecurtion(root.rightChild, key);
-		return root;
+		if(root == null) return null; // not found
+		if(key < root.value) root = findNodeByRecurtion(root.leftChild,key); // search on the left
+		if(key > root.value) root = findNodeByRecurtion(root.rightChild, key); // search on the right
+		return root; // This means the key has been found
 		
+	}
+	
+	Node deleteNode(Node root, int key) {
+		
+		if(root == null) return null; // not found
+		else if(key<root.value) root.leftChild = deleteNode(root.leftChild, key); // search on the left
+		else if(key>root.value) root.rightChild = deleteNode(root.rightChild, key); // search on the right
+		else { // This means the key has been found
+		
+			// Case1: When this node has no children, i.e leaf node.
+			if(root.leftChild == null && root.rightChild == null) {
+				root = null;
+			}// Case3: When this node has two children
+			else if(root.rightChild != null && root.leftChild != null) {
+				Node temp = root;
+				Node minNodeFromRight = getMinimumNodeFromTree(root.rightChild);
+				root.value = minNodeFromRight.value;
+				deleteNode(root.rightChild, minNodeFromRight.value);
+			}
+			// Case2: When this node has only one child
+			// If only left child
+			else if(root.leftChild!=null) {
+				root = root.leftChild;
+			}// If only right child
+			else if(root.rightChild!=null) {
+				root = root.rightChild;
+			}
+			
+			else {
+				root = null;
+			}
+		}
+		return root;
+	}
+	
+	public Node getMinimumNodeFromTree(Node root) {
+		if(root == null) return null;
+		else if(root.leftChild == null) return root;
+		else return getMinimumNodeFromTree(root.leftChild);
 	}
 	
 
