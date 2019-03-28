@@ -18,9 +18,20 @@ public class BinarySearchTreeOperation {
 		System.out.println("Inorder Traverse");
 		bstOperation.inorderTraverse(root);
 		
-		//Inorder Traverse
+		//PreOrder Traverse
 		System.out.println("Pre Order Traverse");
 		bstOperation.preOrderTraverse(root);
+		
+		//PostOrder Traverse
+		System.out.println("Post Order Traverse");
+		bstOperation.postOrderTraverse(root);
+		
+		Node n = bstOperation.findNode(6);
+		if(n !=null) {
+			System.out.println("Node Found:"+ n.value);
+		}else {
+			System.out.println("Node not Found:");
+		}
 		
 	}
 	
@@ -37,13 +48,13 @@ public class BinarySearchTreeOperation {
 			Node parent;
 			while(true) {
 				parent = pointerNode;
-				if(value<root.value) {
+				if(value<pointerNode.value) {
 					pointerNode = pointerNode.leftChild;
 					if(pointerNode == null) {
 						parent.leftChild = newNode;
 						break;
 					}
-				}else if(value>root.value) {
+				}else if(value>pointerNode.value) {
 					pointerNode = pointerNode.rightChild;
 					if(pointerNode == null) {
 						parent.rightChild = newNode;
@@ -61,8 +72,6 @@ public class BinarySearchTreeOperation {
 		System.out.println(root.value);
 		if(root.rightChild!=null)
 			inorderTraverse(root.rightChild);
-		
-		
 	}
 	
 	void preOrderTraverse(Node root) {
@@ -72,7 +81,29 @@ public class BinarySearchTreeOperation {
 			preOrderTraverse(root.leftChild);
 		if(root.rightChild!=null)
 			preOrderTraverse(root.rightChild);
+	}
+	
+	void postOrderTraverse(Node root) {
 		
+		if(root.leftChild!=null)
+			preOrderTraverse(root.leftChild);
+		if(root.rightChild!=null)
+			preOrderTraverse(root.rightChild);
+		System.out.println(root.value);
+	}
+	
+	Node findNode(int key) {
+		
+		Node pointer = root;
+		while(pointer.value!=key) {
+			if(key < pointer.value)
+				pointer = pointer.leftChild;
+			if(key > pointer.value)
+				pointer = pointer.rightChild;
+			if(pointer == null)
+				return null;
+		}
+		return pointer;
 		
 	}
 	
