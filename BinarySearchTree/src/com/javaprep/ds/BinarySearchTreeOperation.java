@@ -45,7 +45,7 @@ public class BinarySearchTreeOperation {
 		System.out.println("Mininum Node:" + bstOperation.getMinimumNodeFromTree(root).value);
 		
 		// Delete Node
-		Node replacedNode = bstOperation.deleteNode(root, 7);
+		Node replacedNode = bstOperation.deleteNode(root, 5);
 		if(replacedNode != null) {
 			System.out.println("Node replaced by:"+replacedNode.value);
 		}else {
@@ -180,7 +180,7 @@ public class BinarySearchTreeOperation {
 				Node temp = root;
 				Node minNodeFromRight = getMinimumNodeFromTree(root.rightChild);
 				root.value = minNodeFromRight.value;
-				deleteNode(root.rightChild, minNodeFromRight.value);
+				root.rightChild = deleteNode(root.rightChild, minNodeFromRight.value);
 			}
 			// Case2: When this node has only one child
 			// If only left child
